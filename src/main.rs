@@ -19,4 +19,6 @@ fn main() {
 
     config.output(300, &vector);
 
+    // This is a change. if this shows up the push worked. 
+
 }
