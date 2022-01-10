@@ -5,10 +5,12 @@ edition = "2021"
 license = "MIT or Apache-2.0"
 description = "Generates 2d simplex noise values and applies Fractal Brownian Motion."
 repository = "https://github.com/RylanYancey/simple-simplex"
+
 exclude = [
     "/images/*",
     "/docs/*"
 ]
+
 keywords = [
     "simplex",
     "perlin",
