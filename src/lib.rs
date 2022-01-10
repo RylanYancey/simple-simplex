@@ -54,10 +54,11 @@ pub struct NoiseConfig {
     seed: u64,
     permutation: [u16; 512],
 }
+
 impl NoiseConfig {
     /// Creates and new Noise Configuration and Defines FBM Values. 
     /// # Examples:
-    ///```
+    ///```rust,ignore
     ///     let config = noise::simplex::NoiseConfig::new(
     ///         3, // octaves
     ///         0.01, // x_freq
@@ -97,7 +98,7 @@ impl NoiseConfig {
         return self.fbm(x, y).0;
     }
 
-    /// This method is private. 
+    /// This method is private, and is not intended for use by an end-user. 
     /// This function is used for applying Fractal Brownian Motion to Simplex Noise Values. 
     fn fbm(&self, x: f32, y: f32) -> (f32, f32, f32) {
         // Values defined according to Config, but can also be changed. 
@@ -167,18 +168,24 @@ impl NoiseConfig {
     }
 
     /// Output generates noise values to terminal.  Width should not be wider than your terminal can handle. 
+    /// 
+    /// Note: The `range` of the noise config you output must correlate with theh length of the `vector` of characters used. 
+    /// 
     /// # Examples:
-    /// ```
+    /// ```rust,ignore
+    /// 
+    /// use simple_simplex::NoiseConfig;
+    /// 
     /// fn main() {
     ///     let vector: Vec<char> = vec![' ',' ', ' ', '.', '-', '=', 'z','X', '#'];
-    ///     let config: lib::NoiseConfig = lib::NoiseConfig::new(
+    ///     let config: NoiseConfig = NoiseConfig::new(
     ///         3, // Octaves
     ///         0.01, // X-Frequency
     ///         0.01, // Y-Frequency
     ///         0.05, // Amplitude
     ///         2.5, // Lacunarity
     ///         0.5, // Gain
-    ///         (0.0, (vector.len() - 1) as f32), // range
+    ///         (0.0, (vector.len() - 1) as f32), // range, must be 0, vector.len() -1 when using output. 
     ///         97838586 // seed
     ///     );
     ///
@@ -230,6 +237,14 @@ impl NoiseConfig {
     /// Outputs a noisemap onto Terminal in 1d form. 
     /// The `length` is the width of the outputted map. For starters,
     /// try 100. 
+    /// 
+    /// The `Height` is the height of the map. For starters, try `30`. 
+    /// # Examples
+    /// ```rust,ignore
+    /// // Create a noise config called `config`
+    /// 
+    /// config.output_1d(30, 100);
+    /// ```
     pub fn output_1d(&self, length: i32, height: i32) {
 
         // Set up variables
@@ -252,7 +267,7 @@ impl NoiseConfig {
         // create vector to store characters for graph. 
         let mut graph: Vec<char> = vec![];
 
-        // Find out where the 'o' should go. 
+        // Find out where the '*' should go. 
         for v in 0..values.len() {
             for i in 0..height {
                 if (values[v] > (min + (dif * i as f32))) && ((min + (dif * (i as f32 + 1.0))) > values[v]) { 
@@ -285,6 +300,9 @@ impl NoiseConfig {
     }
 }
 
+/// This function is private and is not intended to be used by an end-user. 
+/// Scrambles a Noise Configuration's Permutation when it is created. 
+/// uses `rand` with `Pcg64` and SliceRandom's shuffle function to shuffle. 
 fn set_seed(seed: u64) -> [u16; 512] {
     if seed == 0 { return PERMUTATION }
     else {
@@ -295,7 +313,7 @@ fn set_seed(seed: u64) -> [u16; 512] {
     }
 }
 
-/// This function is private. 
+/// This function is private and is not intended to be used by an end-user. 
 /// This function converts a value from one range to another. 
 fn convert_range(old_max: f32, old_min: f32, new_max: f32, new_min: f32, value: f32) -> f32 {
     let scale: f32 = (new_min - new_max)  / (old_min - old_max);
@@ -307,9 +325,21 @@ const F2: f32 = 0.366025403;
 // Constant for `generate`
 const G2: f32 = 0.211324865;
 
-/// This function is private
-/// Contains the Noise Algoithm itself.  returns raw simplex noise values. 
-fn generate(x: f32, y: f32, permutation: &[u16; 512]) -> f32 {
+/// Generate raw simplex noise values
+/// # Examples
+/// ```rust,ignore
+/// use simple_simplex;
+/// 
+/// let value: f32 = generate(10, 10);
+/// ```
+/// 
+/// use `generate` to create your own FBM implementations, or just to generate
+/// raw values. 
+/// 
+/// The maximum value this can generate is 0.855349, and the minimum is -0.855349.
+/// 
+/// To increase or decrease the `scale`, multiply `x` and `y` by a value less than 0. 
+pub fn generate(x: f32, y: f32, permutation: &[u16; 512]) -> f32 {
     let mut n0: f32 = 0.0;
     let mut n1: f32 = 0.0;
     let mut n2: f32 = 0.0;
@@ -369,7 +399,9 @@ fn generate(x: f32, y: f32, permutation: &[u16; 512]) -> f32 {
     return 40.0 * (n0 + n1 + n2);
 }
     
-// Function for Simplex Noise Algorithm. 
+/// This function is private and is not intended to be used by an end-user
+/// Function for Simplex Noise Algorithm. 
+/// Quickly finds the floor of a number faster than std can. 
 fn fast_floor(x: f32) -> i32{
     if x > 0.0 {
        return x as i32; 
@@ -379,7 +411,9 @@ fn fast_floor(x: f32) -> i32{
     }
 }
     
-// Function for simplex noise algorithm. 
+/// This function is private and is not intended to be used by an end-user. 
+/// Function for simplex noise algorithm. 
+/// Calculates Modulo
 fn modulo(x: i32, m: i32) -> i32 {
     let a = x % m;
     if  0 > a  {
@@ -390,8 +424,9 @@ fn modulo(x: i32, m: i32) -> i32 {
     }
 }
     
-
-// Function for simplex noise algorithm. 
+/// This function is private and is not intended to be used by an end-user. 
+/// Function for simplex noise algorithm. 
+/// Calculates gradients.
 fn gradient(hash: u16, x: f32, y: f32) -> f32 {
     let h = hash & 7;        
 

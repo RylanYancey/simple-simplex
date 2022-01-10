@@ -1,12 +1,14 @@
 #![allow(non_snake_case)]
 
-mod Lib;
+extern crate simple_simplex as simplex;
+use simplex::NoiseConfig;
 
+#[test]
 fn main() {
     
     let vector: Vec<char> = vec![' ', '.', '-', '=', 'z', 'X', '#'];
 
-    let config: Lib::NoiseConfig = Lib::NoiseConfig::new(
+    let config: NoiseConfig = NoiseConfig::new(
         1, // Octaves
         0.015, // X-Frequency
         0.015, // Y-Frequency
