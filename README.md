@@ -1,5 +1,7 @@
 # Simplex Noise Generator and Fractal Brownian Motion algorithm. 
 
+Import with `use simplex_simplex::NoiseConfig;`
+
 Simple-Simplex is a library for generating values procedurally.  This is called `noise`.
 
 Simple-Simplex also applies what is called `Fractal Brownian Motion`, or `FBM` to generated values. 
