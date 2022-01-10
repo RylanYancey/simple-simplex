@@ -16,8 +16,7 @@ keywords = [
     "perlin",
     "noise",
     "generation",
-    "procedural",
-    "generator"
+    "procedural"
 ]
 
 categories = [
