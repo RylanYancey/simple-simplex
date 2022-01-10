@@ -40,7 +40,10 @@ const MAX: f32 = 0.855349;
 /// The Minimum Value Possible for Raw generation.
 const MIN: f32 = -0.855349;
 
-/// Please call the new() constructor for this struct instead of manual definition.
+/// The Noise Configuration
+/// 
+/// The Centerpiece of Simple-Simplex. Once you've created a Noise Configuration, you can start generating values. 
+/// Each variable of the NoiseConfig will affect the outputted value. Call the NoiseConfig::new() constructor to set it up. 
 pub struct NoiseConfig {
     pub octaves: i32,
     pub x_frequency: f32,
@@ -57,7 +60,10 @@ impl NoiseConfig {
     /// Creates and new Noise Configuration and Defines FBM Values.
     /// # Examples:
     ///```rust,ignore
-    ///     let config = noise::simplex::NoiseConfig::new(
+    /// 
+    /// use simple_simplex::NoiseConfig;
+    /// 
+    ///     let config = NoiseConfig::new(
     ///         3, // octaves
     ///         0.01, // x_freq
     ///         0.01, // y_freq
