@@ -37,7 +37,10 @@ This section will help you get started using simple-simplex
 simple-simplex uses what is called a `Noise Configuration`. See the example below: 
 
 ```rs
-    let config: Lib::NoiseConfig = Lib::NoiseConfig::new(
+
+    use simple_simplex::NoiseConfig;
+
+    let config: NoiseConfig = NoiseConfig::new(
         3, // Octaves
         0.01, // X-Frequency
         0.01, // Y-Frequency

@@ -7,7 +7,10 @@ The Noise Configuration is how you interface with the Simplex Noise Algorithm in
 A Noise Configuration generally looks like this:
 
 ```rs
-    let config: Lib::NoiseConfig = Lib::NoiseConfig::new(
+
+    use simple_simplex::NoiseConfig;
+
+    let config: NoiseConfig = NoiseConfig::new(
         5, // Octaves
         0.015, // X-Frequency
         0.015, // Y-Frequency
@@ -27,4 +30,4 @@ Once a Noise Configuration has been created, you can use its methods.
 
 1. Octaves
 
-    Refers to the amount of bleh im done with this for noww
+    Refers to the amount of bleh im done with this for now, will add more docs later. 
